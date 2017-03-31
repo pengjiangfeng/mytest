@@ -1,4 +1,4 @@
-package com.pengjf.myapp.retrofit;
+package com.pengjf.myapp.retrofit.bean;
 
 import java.io.Serializable;
 

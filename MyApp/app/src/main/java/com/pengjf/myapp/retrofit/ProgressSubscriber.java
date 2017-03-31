@@ -4,6 +4,8 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.pengjf.myapp.MyApp;
+import com.pengjf.myapp.retrofit.listener.ProgressCancelListener;
+import com.pengjf.myapp.retrofit.listener.SubscriberOnNextListener;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -15,7 +17,7 @@ import rx.Subscriber;
  * 邮箱：pengjf@hadlinks.com
  */
 
-public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCancelListener{
+public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCancelListener {
 
     private SubscriberOnNextListener<T> mListener;
     private Context mContext;

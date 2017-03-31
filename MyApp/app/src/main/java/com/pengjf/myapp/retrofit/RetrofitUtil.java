@@ -1,5 +1,12 @@
 package com.pengjf.myapp.retrofit;
 
+import com.parkingwang.okhttp3.LogInterceptor.LogInterceptor;
+import com.pengjf.myapp.retrofit.bean.Cook;
+import com.pengjf.myapp.retrofit.bean.Movie;
+import com.pengjf.myapp.retrofit.bean.UserModel;
+import com.pengjf.myapp.retrofit.response.BaseResponse;
+import com.pengjf.myapp.retrofit.response.HttpResult;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -10,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -18,8 +26,8 @@ import rx.schedulers.Schedulers;
  */
 
 public class RetrofitUtil {
-    public static final int DEFAULT_TIMEOUT = 5;
-
+    String BASE_URL = "https://api.douban.com/v2/movie/";
+    public static final int DEFAULT_TIMEOUT = 15;
     private Retrofit mRetrofit;
     private ApiService mApiService;
 
@@ -28,9 +36,11 @@ public class RetrofitUtil {
     private RetrofitUtil(){
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+            //日志拦截器
+        builder.addInterceptor(new LogInterceptor());
         mRetrofit = new Retrofit.Builder()
                 .client(builder.build())
-                .baseUrl(ApiService.BASE_URL)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
@@ -58,15 +68,48 @@ public class RetrofitUtil {
                 .subscribe(subscriber);
     }
 
-    public void getCookList(int page, int rows, Subscriber<TngouResponse<List<Cook>>> subscriber){
 
-        toSubscribe(mApiService.getCookList(page,rows),subscriber);
+    public void getCookList(int page, int rows, Subscriber<List<Cook>> subscriber){
+       Observable observable  =  mApiService.getCookList(page,rows)
+                .map(new HttpResultFunc<List<Cook>>());
+//                .subscribeOn(Schedulers.io())
+//                .unsubscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(subscriber);
+        toSubscribe(observable,subscriber);
     }
 
-    private <T> void toSubscribe(Observable<T> observable, Subscriber<T> subscriber){
-        observable.subscribeOn(Schedulers.io())
+    private void toSubscribe(Observable o, Subscriber s){
+        o.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
+                .subscribe(s);
+    }
+
+    public void getMovie(int start ,int end,Subscriber<List<Movie>> subscriber){
+        Observable observable = mApiService.getMovies(0,5).map(new HttpMovieResult<List<Movie>>());
+        toSubscribe(observable ,subscriber);
+    }
+
+    private class HttpResultFunc<T> implements Func1<BaseResponse<T>, T> {
+
+
+        @Override
+        public T call(BaseResponse<T> tBaseResponse) {
+            if (tBaseResponse.code != 100){
+                throw new ApiException(tBaseResponse.code);
+            }
+            return tBaseResponse.data;
+        }
+    }
+
+    private class HttpMovieResult <T> implements Func1<HttpResult<T>,T>{
+
+        @Override
+        public T call(HttpResult<T> result) {
+            if (result.count <= 0)
+                throw new ApiException("出错了");
+            return result.subjects;
+        }
     }
 }

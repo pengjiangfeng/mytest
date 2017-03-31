@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 
+import com.pengjf.myapp.retrofit.listener.ProgressCancelListener;
+
 /**
  * Created by jiangfeng  on 2017/3/29 0029 18:23
  * 邮箱：pengjf@hadlinks.com

@@ -1,4 +1,4 @@
-package com.pengjf.myapp.retrofit;
+package com.pengjf.myapp.retrofit.response;
 
 import com.google.gson.annotations.SerializedName;
 

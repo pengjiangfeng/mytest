@@ -1,4 +1,4 @@
-package com.pengjf.myapp.retrofit;
+package com.pengjf.myapp.retrofit.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -9,28 +9,31 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pengjf.myapp.R;
-import com.pengjf.myapp.retrofit.BaseResponse;
-import com.pengjf.myapp.retrofit.ProgressSubscriber;
-import com.pengjf.myapp.retrofit.RetrofitUtil;
-import com.pengjf.myapp.retrofit.SubscriberOnNextListener;
-import com.pengjf.myapp.retrofit.UserModel;
 import com.pengjf.myapp.utils.ToastUtil;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
-import java.util.List;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
+    @BindView(R.id.line_chart)
+    TextView lineChart;
+    @BindView(R.id.number_progress_bar)
+    NumberProgressBar numberProgressBar;
     private RxPermissions rxPermissions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView lineChart = (TextView) findViewById(R.id.line_chart);
-        lineChart.setOnClickListener(this);
+        ButterKnife.bind(this);
+//        TextView lineChart = (TextView) findViewById(R.id.line_chart);
+//        lineChart.setOnClickListener(this);
         TextView barCart = (TextView) findViewById(R.id.bar_chart);
         barCart.setOnClickListener(this);
         TextView retrofit = (TextView) findViewById(R.id.retrofit);
@@ -49,23 +52,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    public void doGet(){
-//        SubscriberOnNextListener mListener = new SubscriberOnNextListener<TngouResponse<List<Cook>>>() {
+    public void doGet() {
+        Intent intent = new Intent(this, DouBanMovieActivity.class);
+        startActivity(intent);
+//        SubscriberOnNextListener mListener = new SubscriberOnNextListener<List<Cook>>() {
 //            @Override
-//            public void onNext(TngouResponse<List<Cook>> listTngouResponse) {
-//                Log.i(TAG,"size:"+ listTngouResponse.tngou.size());
-//                ToastUtil.ShortToast("size:"+ listTngouResponse.tngou.size());
+//            public void onNext(List<Cook> cooks) {
+//                ToastUtil.ShortToast("size:" + cooks.size());
 //            }
-//
 //        };
-//        RetrofitUtil.getInstance().getCookList(2,5,new ProgressSubscriber<TngouResponse<List<Cook>>>(mListener,this));
-        SubscriberOnNextListener listener = new SubscriberOnNextListener<BaseResponse<List<UserModel>>>() {
-            @Override
-            public void onNext(BaseResponse<List<UserModel>> listBaseResponse) {
-                ToastUtil.ShortToast("size:"+ listBaseResponse.data.size());
-            }
-        };
-        RetrofitUtil.getInstance().getUsers(new ProgressSubscriber<BaseResponse<List<UserModel>>>(listener,this));
+//        RetrofitUtil.getInstance().getCookList(1, 5, new ProgressSubscriber<List<Cook>>(mListener, this));
+//        SubscriberOnNextListener listener = new SubscriberOnNextListener<BaseResponse<List<UserModel>>>() {
+//            @Override
+//            public void onNext(BaseResponse<List<UserModel>> listBaseResponse) {
+//                ToastUtil.ShortToast("size:"+ listBaseResponse.data.size());
+//            }
+//        };
+//        RetrofitUtil.getInstance().getUsers(new ProgressSubscriber<BaseResponse<List<UserModel>>>(listener,this));
+
+
     }
 
     /**
@@ -86,30 +91,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        Intent intent ;
+        Intent intent;
         switch (view.getId()) {
             case R.id.line_chart:
-                intent = new Intent(this,LineChartActivity.class);
+                intent = new Intent(this, LineChartActivity.class);
                 startActivity(intent);
                 break;
             case R.id.bar_chart:
-                intent = new Intent(this,BarChartActivity.class);
+                intent = new Intent(this, BarChartActivity.class);
                 startActivity(intent);
                 break;
             case R.id.retrofit:
-                doGet();
+
                 rxPermissions
-                        .request(Manifest.permission.CAMERA)
+                        .request(Manifest.permission.READ_EXTERNAL_STORAGE)
                         .subscribe(granted -> {
                             if (granted) { // Always true pre-M
-                                Log.i(TAG,"get:"+ granted);
-
+                                Log.i(TAG, "get:" + granted);
+                                doGet();
                             } else {
-                                Log.i(TAG,"get:"+ granted);
+                                Log.i(TAG, "get:" + granted);
                             }
                         });
 
                 break;
         }
     }
+
+    @OnClick(R.id.line_chart)
+    public void onViewClicked() {
+        Intent intent = new Intent(this, LineChartActivity.class);
+        startActivity(intent);
+    }
+
 }
