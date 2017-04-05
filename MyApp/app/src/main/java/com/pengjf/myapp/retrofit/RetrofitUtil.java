@@ -1,6 +1,8 @@
 package com.pengjf.myapp.retrofit;
 
 import com.parkingwang.okhttp3.LogInterceptor.LogInterceptor;
+import com.pengjf.myapp.recyclerView.DataBean;
+import com.pengjf.myapp.recyclerView.HeaderBean;
 import com.pengjf.myapp.retrofit.bean.Cook;
 import com.pengjf.myapp.retrofit.bean.Movie;
 import com.pengjf.myapp.retrofit.bean.UserModel;
@@ -20,13 +22,15 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+import static com.pengjf.myapp.utils.ConstantUtil.BASE_URL;
+
 /**
  * Created by jiangfeng  on 2017/3/29 0029 18:16
  * 邮箱：pengjf@hadlinks.com
  */
 
 public class RetrofitUtil {
-    String BASE_URL = "https://api.douban.com/v2/movie/";
+
     public static final int DEFAULT_TIMEOUT = 15;
     private Retrofit mRetrofit;
     private ApiService mApiService;
@@ -88,6 +92,16 @@ public class RetrofitUtil {
 
     public void getMovie(int start ,int end,Subscriber<List<Movie>> subscriber){
         Observable observable = mApiService.getMovies(0,5).map(new HttpMovieResult<List<Movie>>());
+        toSubscribe(observable ,subscriber);
+    }
+
+    public void getHeader (int type, Subscriber<List<HeaderBean>> subscriber){
+        Observable observable = mApiService.getHeader(type);
+        toSubscribe(observable ,subscriber);
+    }
+
+    public void getCenter ( Subscriber<List<DataBean>> subscriber){
+        Observable observable = mApiService.getData();
         toSubscribe(observable ,subscriber);
     }
 

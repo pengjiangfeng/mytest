@@ -1,5 +1,7 @@
 package com.pengjf.myapp.retrofit;
 
+import com.pengjf.myapp.recyclerView.DataBean;
+import com.pengjf.myapp.recyclerView.HeaderBean;
 import com.pengjf.myapp.retrofit.bean.Cook;
 import com.pengjf.myapp.retrofit.bean.Movie;
 import com.pengjf.myapp.retrofit.bean.UserModel;
@@ -40,4 +42,10 @@ public interface ApiService {
 //    @Multipart
 //    @POST("AppYuFaKu/uploadHeadImg")
 //    Observable<BaseResponse<UploadResulte>> uploadImage(@Part("uid") RequestBody uid, @Part("auth_key") RequestBody auth_key, @Part MultipartBody.Part file);
+
+    @GET("banner/query")
+    Observable<List<HeaderBean>> getHeader(@Query("type")int type);
+    @GET("campaign/recommend")
+    Observable<List<DataBean>>getData();
+
 }

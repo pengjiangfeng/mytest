@@ -38,14 +38,18 @@
         android:gravity="center"
         android:textSize="20dp"
         android:textColor="@color/colorWhite"
-        android:text="测试网络"
+        android:text="@string/test_retrofit"
         android:background="@color/colorBlack"
         />
-    <com.daimajia.numberprogressbar.NumberProgressBar
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/number_progress_bar"
-        android:layout_marginTop="20dp"
-        custom:progress_text_size="20sp"
-        xmlns:custom="http://schemas.android.com/apk/res-auto"/>
+    <TextView
+        android:id="@+id/test_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:textColor="@color/colorWhite"
+        android:text="复杂recyclerView"
+        android:background="@color/colorBlack"
+        />
 </LinearLayout>

@@ -11,6 +11,7 @@ import com.pengjf.myapp.retrofit.ProgressSubscriber;
 import com.pengjf.myapp.retrofit.RetrofitUtil;
 import com.pengjf.myapp.retrofit.bean.Movie;
 import com.pengjf.myapp.retrofit.listener.SubscriberOnNextListener;
+import com.pengjf.myapp.utils.ConstantUtil;
 import com.pengjf.myapp.utils.ToastUtil;
 import com.pengjf.myapp.view.DividerItemDecoration;
 import com.pengjf.myapp.view.ItemClickHelper;
@@ -24,6 +25,7 @@ public class DouBanMovieActivity extends AppCompatActivity {
     private int page ;
     private MovieAdapter mAdapter;
     private List<Movie> mList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,7 @@ public class DouBanMovieActivity extends AppCompatActivity {
 
     private void initView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView.scrollBy(0,200);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.addOnItemTouchListener(new ItemClickHelper(mRecyclerView, new ItemClickHelper.OnItemClickListener() {
@@ -44,7 +47,7 @@ public class DouBanMovieActivity extends AppCompatActivity {
 
             @Override
             public void onItemLongClick(View view, int position) {
-
+                ToastUtil.LongToast(mList.get(position).getTitle() +"\t导演 "+ mList.get(position).getDirectors().get(0).getName());
             }
         }));
         mAdapter = new MovieAdapter(mList,this);
@@ -53,6 +56,7 @@ public class DouBanMovieActivity extends AppCompatActivity {
     }
 
     private void getData(boolean b) {
+        ConstantUtil.BASE_URL="https://api.douban.com/v2/movie/";
         RetrofitUtil.getInstance().getMovie(0,20,new ProgressSubscriber<>(new SubscriberOnNextListener<List<Movie>>() {
             @Override
             public void onNext(List<Movie> movies) {

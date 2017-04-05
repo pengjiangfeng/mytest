@@ -9,7 +9,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.pengjf.myapp.R;
 import com.pengjf.myapp.utils.ToastUtil;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -18,13 +17,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity  {
 
     private static final String TAG = "MainActivity";
     @BindView(R.id.line_chart)
     TextView lineChart;
-    @BindView(R.id.number_progress_bar)
-    NumberProgressBar numberProgressBar;
+    @BindView(R.id.bar_chart)
+    TextView barChart;
+    @BindView(R.id.retrofit)
+    TextView retrofit;
+    @BindView(R.id.test_recycler_view)
+    TextView testRecyclerView;
     private RxPermissions rxPermissions;
 
     @Override
@@ -32,12 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-//        TextView lineChart = (TextView) findViewById(R.id.line_chart);
-//        lineChart.setOnClickListener(this);
-        TextView barCart = (TextView) findViewById(R.id.bar_chart);
-        barCart.setOnClickListener(this);
-        TextView retrofit = (TextView) findViewById(R.id.retrofit);
-        retrofit.setOnClickListener(this);
         rxPermissions = new RxPermissions(this);
     }
 
@@ -88,9 +85,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @OnClick(R.id.line_chart)
+    public void onViewClicked() {
+        Intent intent = new Intent(this, LineChartActivity.class);
+        startActivity(intent);
+    }
 
-    @Override
-    public void onClick(View view) {
+    @OnClick({R.id.line_chart, R.id.bar_chart, R.id.retrofit, R.id.test_recycler_view})
+    public void onViewClicked(View view) {
         Intent intent;
         switch (view.getId()) {
             case R.id.line_chart:
@@ -102,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.retrofit:
-
                 rxPermissions
                         .request(Manifest.permission.READ_EXTERNAL_STORAGE)
                         .subscribe(granted -> {
@@ -113,15 +114,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Log.i(TAG, "get:" + granted);
                             }
                         });
-
+                break;
+            case R.id.test_recycler_view:
+                intent = new Intent(this, RecyclerViewActivity.class);
+                startActivity(intent);
                 break;
         }
     }
-
-    @OnClick(R.id.line_chart)
-    public void onViewClicked() {
-        Intent intent = new Intent(this, LineChartActivity.class);
-        startActivity(intent);
-    }
-
 }
