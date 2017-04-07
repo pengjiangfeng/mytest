@@ -63,4 +63,27 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Holder>{
             mark = (TextView) itemView.findViewById(R.id.mark);
         }
     }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //如果快速滑动， 不加载图片
+                if (newState == 2) {
+                    Glide.with(mContext).pauseRequests();
+                } else {
+                    Glide.with(mContext).resumeRequests();
+
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+    }
 }

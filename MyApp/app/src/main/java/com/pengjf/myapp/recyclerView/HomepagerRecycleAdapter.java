@@ -43,6 +43,7 @@ public class HomepagerRecycleAdapter extends RecyclerView.Adapter {
     private List<DataBean> centerBean;
     private List<HeaderBean> headList;
     private ArrayList<HomeCategory> mHomeCategories = new ArrayList<>();
+    private MyStaggerGrildLayoutManger mystager;
     public HomepagerRecycleAdapter(Context context) {
         mContext = context;
         inflater = LayoutInflater.from(context);
@@ -302,6 +303,12 @@ public class HomepagerRecycleAdapter extends RecyclerView.Adapter {
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager instanceof MyStaggerGrildLayoutManger) {
+            mystager = ((MyStaggerGrildLayoutManger) layoutManager);
+
+        }
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

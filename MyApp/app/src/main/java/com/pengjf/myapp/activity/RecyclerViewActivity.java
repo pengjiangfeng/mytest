@@ -112,7 +112,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     }
 
     private void initRefresh() {
-        mrlMainactivity.setLoadMore(true);
+        mrlMainactivity.setLoadMore(false);
         mrlMainactivity.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
             public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {

@@ -52,4 +52,15 @@
         android:text="复杂recyclerView"
         android:background="@color/colorBlack"
         />
+    <TextView
+        android:id="@+id/ble"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:textColor="@color/colorWhite"
+        android:text="test_ble"
+        android:background="@color/colorBlack"
+        />
 </LinearLayout>

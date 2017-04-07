@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     @BindView(R.id.line_chart)
@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity  {
     TextView retrofit;
     @BindView(R.id.test_recycler_view)
     TextView testRecyclerView;
+    @BindView(R.id.ble)
+    TextView ble;
+
     private RxPermissions rxPermissions;
 
     @Override
@@ -85,13 +88,8 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    @OnClick(R.id.line_chart)
-    public void onViewClicked() {
-        Intent intent = new Intent(this, LineChartActivity.class);
-        startActivity(intent);
-    }
 
-    @OnClick({R.id.line_chart, R.id.bar_chart, R.id.retrofit, R.id.test_recycler_view})
+    @OnClick({R.id.line_chart, R.id.bar_chart, R.id.retrofit, R.id.test_recycler_view, R.id.ble})
     public void onViewClicked(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -117,6 +115,10 @@ public class MainActivity extends AppCompatActivity  {
                 break;
             case R.id.test_recycler_view:
                 intent = new Intent(this, RecyclerViewActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ble:
+                intent = new Intent(this, BleActivity.class);
                 startActivity(intent);
                 break;
         }

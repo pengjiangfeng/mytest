@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DouBanMovieActivity extends AppCompatActivity {
-    private RecyclerView mRecyclerView ;
-    private int page ;
+    private RecyclerView mRecyclerView;
+    private int page;
     private MovieAdapter mAdapter;
     private List<Movie> mList = new ArrayList<>();
 
@@ -32,13 +32,15 @@ public class DouBanMovieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dou_ban_movie);
         initView();
         getData(true);
+        getData(false);
+        getData(false);
     }
 
     private void initView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.scrollBy(0,200);
+        mRecyclerView.scrollBy(0, 200);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.addOnItemTouchListener(new ItemClickHelper(mRecyclerView, new ItemClickHelper.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -47,27 +49,31 @@ public class DouBanMovieActivity extends AppCompatActivity {
 
             @Override
             public void onItemLongClick(View view, int position) {
-                ToastUtil.LongToast(mList.get(position).getTitle() +"\t导演 "+ mList.get(position).getDirectors().get(0).getName());
+                ToastUtil.LongToast(mList.get(position).getTitle() + "\t导演 " + mList.get(position).getDirectors().get(0).getName());
             }
         }));
-        mAdapter = new MovieAdapter(mList,this);
+        mAdapter = new MovieAdapter(mList, this);
         mRecyclerView.setAdapter(mAdapter);
 
     }
 
     private void getData(boolean b) {
-        ConstantUtil.BASE_URL="https://api.douban.com/v2/movie/";
-        RetrofitUtil.getInstance().getMovie(0,20,new ProgressSubscriber<>(new SubscriberOnNextListener<List<Movie>>() {
+        ConstantUtil.BASE_URL = "https://api.douban.com/v2/movie/";
+        RetrofitUtil.getInstance().getMovie(0, 20, new ProgressSubscriber<>(new SubscriberOnNextListener<List<Movie>>() {
             @Override
             public void onNext(List<Movie> movies) {
-                if (movies != null){
-                    mList.clear();
-                    mList.addAll(movies);
-                    mAdapter.notifyDataSetChanged();
+                synchronized (mList) {
+                    if (movies != null) {
+                        if (b) {
+                            mList.clear();
+                        }
+                        mList.addAll(movies);
+                        mAdapter.notifyDataSetChanged();
+                    }
+
                 }
             }
-        },this));
+        }, this));
     }
-
 
 }
