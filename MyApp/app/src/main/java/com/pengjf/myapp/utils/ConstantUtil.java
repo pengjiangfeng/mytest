@@ -9,5 +9,10 @@ package com.pengjf.myapp.utils;
 
 public class ConstantUtil {
 
-    public static String BASE_URL = "http://112.124.22.238:8081/course_api/";
+    public static String BASE_URL = "https://fhs-test.yunext.com/";
+    public static final String ACCESS_KEY = "LH6AB08F8G7324H6GBC42D3OC72GLJ26";
+    public static final String TOKEN = "22bebd42-40ba-42a6-8006-13b1702c0b66";
+    public static final String IMG_URL = BASE_URL + "UploadedFile/";
+
+
 }

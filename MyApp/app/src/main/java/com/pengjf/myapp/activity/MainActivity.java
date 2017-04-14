@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +15,7 @@ import com.tbruyelle.rxpermissions.RxPermissions;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,24 +53,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doGet() {
-        Intent intent = new Intent(this, DouBanMovieActivity.class);
+        Intent intent = new Intent(this, TestBLEActivity.class);
         startActivity(intent);
-//        SubscriberOnNextListener mListener = new SubscriberOnNextListener<List<Cook>>() {
-//            @Override
-//            public void onNext(List<Cook> cooks) {
-//                ToastUtil.ShortToast("size:" + cooks.size());
-//            }
-//        };
-//        RetrofitUtil.getInstance().getCookList(1, 5, new ProgressSubscriber<List<Cook>>(mListener, this));
-//        SubscriberOnNextListener listener = new SubscriberOnNextListener<BaseResponse<List<UserModel>>>() {
-//            @Override
-//            public void onNext(BaseResponse<List<UserModel>> listBaseResponse) {
-//                ToastUtil.ShortToast("size:"+ listBaseResponse.data.size());
-//            }
-//        };
-//        RetrofitUtil.getInstance().getUsers(new ProgressSubscriber<BaseResponse<List<UserModel>>>(listener,this));
-
-
     }
 
     /**
@@ -104,12 +88,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.retrofit:
                 rxPermissions
                         .request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                        .subscribe(granted -> {
-                            if (granted) { // Always true pre-M
-                                Log.i(TAG, "get:" + granted);
-                                doGet();
-                            } else {
-                                Log.i(TAG, "get:" + granted);
+                        .subscribe(new Action1<Boolean>() {
+                            @Override
+                            public void call(Boolean aBoolean) {
+                                    if (aBoolean){
+                                        Intent intent1 = new Intent(MainActivity.this, TestBLEActivity.class);
+                                        startActivity(intent1);
+                                    }
                             }
                         });
                 break;
@@ -118,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.ble:
-                intent = new Intent(this, BleActivity.class);
+                intent = new Intent(this, XRecyclerViewActivity.class);
                 startActivity(intent);
                 break;
         }

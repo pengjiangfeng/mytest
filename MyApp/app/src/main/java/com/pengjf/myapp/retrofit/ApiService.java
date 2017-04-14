@@ -1,20 +1,28 @@
 package com.pengjf.myapp.retrofit;
 
+import com.pengjf.myapp.bean.NewsData;
 import com.pengjf.myapp.recyclerView.DataBean;
 import com.pengjf.myapp.recyclerView.HeaderBean;
 import com.pengjf.myapp.retrofit.bean.Cook;
 import com.pengjf.myapp.retrofit.bean.Movie;
 import com.pengjf.myapp.retrofit.bean.UserModel;
 import com.pengjf.myapp.retrofit.response.BaseResponse;
+import com.pengjf.myapp.retrofit.response.HttpFhsResult;
 import com.pengjf.myapp.retrofit.response.HttpResult;
 
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -47,5 +55,21 @@ public interface ApiService {
     Observable<List<HeaderBean>> getHeader(@Query("type")int type);
     @GET("campaign/recommend")
     Observable<List<DataBean>>getData();
+    //https://fhs-test.yunext.com
+    @FormUrlEncoded
+    @POST("api/news/query")
+    Observable<HttpFhsResult<List<NewsData>>>getNews
+    (@Field("accessKey") String accessKey,@Field("token") String token ,@Field("page") int page);
 
+    @GET("api/news/getCover")
+    Observable<HttpFhsResult<Map<String ,String>>> getCorver
+            (@Query("accessKey") String accessKey,@Query("token") String token);
+
+    @POST("web/image/upload")
+    Observable<HttpFhsResult<String>>uploadImg
+            (@Body RequestBody body);
+
+    @Streaming
+    @GET
+    Observable<ResponseBody> download(@Url String url);
 }

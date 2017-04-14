@@ -6,6 +6,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.pengjf.myapp.listeneners.OnItemClickListener;
+
 /**
  * Created by jiangfeng  on 2017/3/31 0031 18:32
  * 邮箱：pengjf@hadlinks.com
@@ -14,13 +16,6 @@ import android.view.View;
 public class ItemClickHelper extends RecyclerView.SimpleOnItemTouchListener{
     private OnItemClickListener clickListener;
     private GestureDetectorCompat gestureDetector;
-
-    public interface OnItemClickListener {
-
-        void onItemClick(View view, int position);
-
-        void onItemLongClick(View view, int position);
-    }
 
     public ItemClickHelper(final RecyclerView recyclerView, OnItemClickListener listener) {
         this.clickListener = listener;

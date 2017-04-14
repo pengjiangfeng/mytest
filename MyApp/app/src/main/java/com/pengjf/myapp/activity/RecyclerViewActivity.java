@@ -68,6 +68,11 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
                 }
             }
+
+            @Override
+            public void onFinish() {
+
+            }
         }, mContext));
     }
 
@@ -80,6 +85,11 @@ public class RecyclerViewActivity extends AppCompatActivity {
                     adapter.setCenterBean(dataBeen);
 
                 }
+            }
+
+            @Override
+            public void onFinish() {
+
             }
         }, mContext));
     }
@@ -107,6 +117,11 @@ public class RecyclerViewActivity extends AppCompatActivity {
                     adapter.setheaderbean(headerBeen);
 
                 }
+            }
+
+            @Override
+            public void onFinish() {
+
             }
         }, mContext));
     }

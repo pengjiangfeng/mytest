@@ -123,11 +123,13 @@ public class StatusBarUtil {
     if (v == null || !transparentStatusBar || isLessKitkat()) {
       return;
     }
-    v.post(() -> {
-
-      v.setPadding(v.getPaddingLeft(), v.getPaddingTop() + getStatusBarOffsetPx(v.getContext()),
-          v.getPaddingRight(), v.getPaddingBottom());
-      v.getLayoutParams().height += getStatusBarOffsetPx(v.getContext());
+    v.post(new Runnable() {
+      @Override
+      public void run() {
+        v.setPadding(v.getPaddingLeft(), v.getPaddingTop() + getStatusBarOffsetPx(v.getContext()),
+                v.getPaddingRight(), v.getPaddingBottom());
+        v.getLayoutParams().height += getStatusBarOffsetPx(v.getContext());
+      }
     });
   }
 

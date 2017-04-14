@@ -1,6 +1,7 @@
 package com.pengjf.myapp.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,6 +11,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.pengjf.myapp.R;
 import com.pengjf.myapp.utils.CalculateUtil;
 import com.pengjf.myapp.utils.DisplayUtil;
 
@@ -131,6 +133,9 @@ public class BarChartView extends View {
 
     public BarChartView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.HomepageHeaderView);
+        boolean visiable = ta.getBoolean(R.styleable.HomepageHeaderView_isrightivtvvisible,false);
+        ta.recycle();
         init(context);
     }
 

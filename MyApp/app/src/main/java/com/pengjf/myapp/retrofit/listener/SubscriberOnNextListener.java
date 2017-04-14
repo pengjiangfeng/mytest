@@ -7,4 +7,5 @@ package com.pengjf.myapp.retrofit.listener;
 
 public interface SubscriberOnNextListener<T> {
     void onNext(T t);
+    void onFinish();
 }

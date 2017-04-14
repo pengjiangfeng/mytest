@@ -22,13 +22,19 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     private SubscriberOnNextListener<T> mListener;
     private Context mContext;
     private ProgressDialogHandler mHandler;
-
+    private boolean isShow = true;
     public ProgressSubscriber(SubscriberOnNextListener<T> listener, Context context){
         this.mListener = listener;
         this.mContext = context;
         mHandler = new ProgressDialogHandler(context,this,true);
     }
 
+    public ProgressSubscriber(SubscriberOnNextListener<T> listener, Context context,boolean isShowDialog){
+        this.mListener = listener;
+        this.mContext = context;
+        mHandler = new ProgressDialogHandler(context,this,true);
+        isShow = isShowDialog ;
+    }
     private void showProgressDialog(){
         if (mHandler != null) {
             mHandler.obtainMessage(ProgressDialogHandler.SHOW_PROGRESS_DIALOG).sendToTarget();
@@ -50,13 +56,15 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     @Override
     public void onStart() {
         super.onStart();
-        showProgressDialog();
+        if (isShow){
+            showProgressDialog();
+        }
     }
 
     @Override
     public void onCompleted() {
         dismissProgressDialog();
-        Toast.makeText(MyApp.getAppContext(),"获取数据完成！",Toast.LENGTH_SHORT).show();
+        mListener.onFinish();
     }
 
     @Override
@@ -69,6 +77,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
             Toast.makeText(MyApp.getAppContext(), "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         dismissProgressDialog();
+        mListener.onFinish();
     }
 
     @Override
