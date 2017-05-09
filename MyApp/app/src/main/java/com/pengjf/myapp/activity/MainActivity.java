@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     TextView testRecyclerView;
     @BindView(R.id.ble)
     TextView ble;
+    @BindView(R.id.live)
+    TextView live;
 
     private RxPermissions rxPermissions;
 
@@ -91,10 +93,10 @@ public class MainActivity extends AppCompatActivity {
                         .subscribe(new Action1<Boolean>() {
                             @Override
                             public void call(Boolean aBoolean) {
-                                    if (aBoolean){
-                                        Intent intent1 = new Intent(MainActivity.this, TestBLEActivity.class);
-                                        startActivity(intent1);
-                                    }
+                                if (aBoolean) {
+                                    Intent intent1 = new Intent(MainActivity.this, TestBLEActivity.class);
+                                    startActivity(intent1);
+                                }
                             }
                         });
                 break;
@@ -107,5 +109,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
         }
+    }
+
+    @OnClick(R.id.live)
+    public void onClick() {
+        Intent intent = new Intent(this, LiveActivity.class);
+        startActivity(intent);
     }
 }

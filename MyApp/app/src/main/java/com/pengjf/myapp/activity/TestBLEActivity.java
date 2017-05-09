@@ -6,9 +6,17 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.os.ParcelUuid;
+import android.os.RemoteException;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,7 +29,13 @@ import com.pengjf.myapp.retrofit.downLoad.DownLoadUtil;
 import com.pengjf.myapp.retrofit.downLoad.FileCallBack;
 import com.pengjf.myapp.utils.FileStorage;
 import com.pengjf.myapp.utils.LogUtil;
+import com.pengjf.myapp.view.ChartEntity;
+import com.pengjf.myapp.view.TestView;
 import com.tbruyelle.rxpermissions.RxPermissions;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +58,18 @@ public class TestBLEActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         pb = (SeekBar) findViewById(R.id.progressBar);
         pb.setVisibility(View.GONE);
+        init();
+    }
+
+    private void init() {
+        List<ChartEntity> charts = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0 ; i< 24 ;i++){
+            ChartEntity chart = new ChartEntity(i+"test", (float) random.nextInt(300));
+            charts.add(chart);
+        }
+        TestView testView = (TestView) findViewById(R.id.test_view);
+        testView.setList(charts);
     }
 
     @OnClick({R.id.search, R.id.connect})
@@ -66,12 +92,61 @@ public class TestBLEActivity extends AppCompatActivity {
 
                 break;
             case R.id.connect:
-//                Intent intent = new Intent(this,TestIntentService.class);
-//                startService(intent);
-                download();
+                bindService();
+//                download();
                 break;
         }
     }
+    private boolean isBound ;
+    private void bindService() {
+
+       if (!isBound){
+           isBound = bindService(new Intent(this,TestIntentService.class),serviceConnection,BIND_AUTO_CREATE);
+       }else {
+           sendMessage();
+       }
+    }
+    private Messenger mLocalMessenger ;
+    private Messenger mServiceMessenger ;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mLocalMessenger = new Messenger(mHandler);
+            mServiceMessenger = new Messenger(service);
+            sendMessage();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mServiceMessenger = null ;
+        }
+    };
+
+    private void sendMessage() {
+        Message message = Message.obtain(null,TestIntentService.CUSGET);
+        message.replyTo = mLocalMessenger ;
+        try {
+            mServiceMessenger.send(message);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 0x02:
+                    try {
+                        mServiceMessenger.send(msg);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }
+    };
 
     private void download() {
         String dir = new FileStorage().getIconDir().getAbsolutePath();
@@ -142,6 +217,14 @@ public class TestBLEActivity extends AppCompatActivity {
 
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (serviceConnection != null && isBound){
+            unbindService(serviceConnection);
         }
     }
 }

@@ -63,4 +63,26 @@
         android:text="xRecyclerView"
         android:background="@color/colorBlack"
         />
+    <TextView
+        android:id="@+id/ble"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:textColor="@color/colorWhite"
+        android:text="xRecyclerView"
+        android:background="@color/colorBlack"
+        />
+    <TextView
+        android:id="@+id/live"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:textColor="@color/colorWhite"
+        android:text="jiecao"
+        android:background="@color/colorBlack"
+        />
 </LinearLayout>

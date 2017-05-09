@@ -2,6 +2,10 @@ package com.pengjf.myapp.activity;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.support.annotation.Nullable;
 
 import java.util.concurrent.ExecutorService;
@@ -18,8 +22,22 @@ import rx.functions.Action1;
  */
 
 public class TestIntentService extends IntentService{
+    private Messenger cusMessenger ; // 客户端信使
+    public final static int CUSGET = 0x01 ;
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case CUSGET:
+                    cusMessenger = msg.replyTo ;
+                    break;
+            }
+        }
+    };
 
-
+    //本地的信使
+    private Messenger messenger = new Messenger(mHandler);
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
@@ -63,4 +81,13 @@ public class TestIntentService extends IntentService{
     protected void onHandleIntent(@Nullable Intent intent) {
 
     }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+
+       return messenger.getBinder();
+    }
+
+
 }

@@ -71,7 +71,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
-                        mOnItemClickListener.onItemClick(v,getLayoutPosition());
+                        mOnItemClickListener.onItemClick(v,getAdapterPosition());
                     }
                 }
             });
